@@ -107,12 +107,27 @@ export class AppComponent implements OnInit {
     console.log(this.helmetTextFilterControl.value, this.gauntletTextFilterControl.value, this.chestTextFilterControl.value, this.legsTextFilterControl.value)
     console.log(this.permutations.length, this.permutations)
     // Filter stats
-    let filteredPermutations = this.permutations.filter(p => {
+
+    let newPermutations = this.permutations.map(p => {
+      let newPerm = Object.assign({}, p)
+      let nstats = Object.assign({}, p.stats)
+      newPerm.stats = nstats
+
+      nstats.mobility += 1 * (this.staticMobilityControl.value || 0);
+      nstats.resilience += 1 * (this.staticResilienceControl.value || 0);
+      nstats.recovery += 1 * (this.staticRecoveryControl.value || 0);
+      nstats.discipline += 1 * (this.staticDisciplineControl.value || 0);
+      nstats.intellect += 1 * (this.staticIntellectControl.value || 0);
+      nstats.strength += 1 * (this.staticStrengthControl.value || 0);
+
+      return newPerm;
+    })
+
+    let filteredPermutations = newPermutations.filter(p => {
       if (!p.gauntlet || !p.chest || !p.legs) {
         console.warn(p)
         return false;
       }
-
 
       // filter name(s)
       if ((this.helmetTextFilterControl.value && p.helmet.name.toLowerCase().indexOf(this.helmetTextFilterControl.value.toLowerCase()) < 0)
@@ -134,18 +149,10 @@ export class AppComponent implements OnInit {
     })
     let newList = filteredPermutations.map(data => {
       let p: PrintedPermutation = {
-        permutation: Object.assign({}, data),
+        permutation: data,
         score: 0
       }
-      let nstats = Object.assign({}, data.stats)
-      p.permutation.stats = nstats
-
-      nstats.mobility += 1 * (this.staticMobilityControl.value || 0);
-      nstats.resilience += 1 * (this.staticResilienceControl.value || 0);
-      nstats.recovery += 1 * (this.staticRecoveryControl.value || 0);
-      nstats.discipline += 1 * (this.staticDisciplineControl.value || 0);
-      nstats.intellect += 1 * (this.staticIntellectControl.value || 0);
-      nstats.strength += 1 * (this.staticStrengthControl.value || 0);
+      let nstats = data.stats
 
       if (data.gauntlet && data.legs && data.chest) {
         let mobility = nstats.mobility
