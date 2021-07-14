@@ -5,6 +5,13 @@
     <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
   </ngx-dropzone-preview>
 </ngx-dropzone>
+
+<div id="uploadInfoBox" *ngIf="files.length == 0">
+  <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
+    at the bottom of the Settings section.</h1>
+  Otherwise, click <a mat-flat-button (click)="addExampleFile()">here</a> to use example items. Please don't judge me
+  for my full vault.
+</div>
 <br>
 <mat-form-field appearance="fill">
   <mat-label>Class</mat-label>
@@ -14,13 +21,6 @@
     <mat-option [value]="1">Warlock</mat-option>
   </mat-select>
 </mat-form-field>
-
-<div id="uploadInfoBox" *ngIf="files.length == 0">
-  <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
-    at the bottom of the Settings section.</h1>
-  Otherwise, click <a mat-flat-button (click)="addExampleFile()">here</a> to use example items. Please don't judge me
-  for my full vault.
-</div>
 
 <form class="example-container" [formGroup]="options">
   <mat-slide-toggle [checked]="advanceModeActive" (toggleChange)="toggleAdvanceMode()">Toggle advanced mode. Adds many
