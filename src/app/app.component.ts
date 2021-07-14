@@ -8,6 +8,7 @@ import {debounceTime} from "rxjs/operators";
 import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {Stats} from "./model/stats";
 
 interface PrintedPermutation {
   permutation: Permutation;
@@ -59,7 +60,7 @@ export class AppComponent implements OnInit {
 
   updateTableSubject: Subject<any> = new Subject();
   updatePermutationsSubject: Subject<any> = new Subject();
-  shownColumns = ["mobility", "resilience", "recovery", "discipline", "intellect", "strength"]
+  shownColumns = ["mobility", "resilience", "recovery", "discipline", "intellect", "strength", "tiers"]
 
   permutations: Permutation[] = []
   printedTable: PrintedPermutation[] = []
@@ -259,5 +260,13 @@ export class AppComponent implements OnInit {
       })
   }
 
+  getSkillTierFromPermutation(stat: Stats) {
+    return Math.floor(stat.mobility / 10)
+      + Math.floor(stat.resilience / 10)
+      + Math.floor(stat.recovery / 10)
+      + Math.floor(stat.discipline / 10)
+      + Math.floor(stat.intellect / 10)
+      + Math.floor(stat.strength / 10)
+  }
 
 }

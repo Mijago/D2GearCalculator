@@ -265,6 +265,12 @@
       <td mat-cell *matCellDef="let element "> {{element.permutation.stats.strength}} </td>
     </ng-container>
 
+    <!-- Name Column -->
+    <ng-container matColumnDef="tiers">
+      <th mat-header-cell *matHeaderCellDef>Tiers</th>
+      <td mat-cell *matCellDef="let element "> {{getSkillTierFromPermutation(element.permutation.stats)}} </td>
+    </ng-container>
+
     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let element" [attr.colspan]="shownColumns.length">
@@ -342,6 +348,8 @@
     </li>
     <li><del>Allow the definition of standard values (like Powerful Friends, Radiant Light, Stasis)*</del></li>
     <li>Allow modification of penalties*</li>
+    <li>Reset Button for the input mask</li>
+    <li><del>Show status tiers for each set</del></li>
     <li>Save settings across sessions (cookies!)*</li>
     <li>Bungie API login (to get rid of destinyArmor.csv)</li>
     <li>Show icons of the items, and the name on hover. Or something like this. At least show the Icons!</li>
