@@ -5,7 +5,7 @@ import {DestinyArmorPermutationService, Permutation} from "./services/destiny-ar
 import {ArmorClass, ArmorSlot} from "./model/armor-slot";
 import {Subject} from "rxjs";
 import {debounceTime} from "rxjs/operators";
-import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 
@@ -28,6 +28,34 @@ interface PrintedPermutation {
 export class AppComponent implements OnInit {
   title = 'D2GearCalculator';
 
+  options: FormGroup;
+  advanceModeActive: boolean = false;
+
+  minMobilityControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+  minResilienceControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+  minRecoveryControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+  minDisciplineControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+  minIntellectControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+  minStrengthControl = new FormControl(18, [Validators.min(18), Validators.max(100)]);
+
+  maxMobilityControl = new FormControl("", [Validators.min(18)]);
+  maxResilienceControl = new FormControl("", [Validators.min(18)]);
+  maxRecoveryControl = new FormControl("", [Validators.min(18)]);
+  maxDisciplineControl = new FormControl("", [Validators.min(18)]);
+  maxIntellectControl = new FormControl("", [Validators.min(18)]);
+  maxStrengthControl = new FormControl("", [Validators.min(18)]);
+
+  staticMobilityControl = new FormControl("", [Validators.min(0)]);
+  staticResilienceControl = new FormControl("", [Validators.min(0)]);
+  staticRecoveryControl = new FormControl("", [Validators.min(0)]);
+  staticDisciplineControl = new FormControl("", [Validators.min(0)]);
+  staticIntellectControl = new FormControl("", [Validators.min(0)]);
+  staticStrengthControl = new FormControl("", [Validators.min(0)]);
+
+  helmetTextFilterControl = new FormControl("");
+  gauntletTextFilterControl = new FormControl("");
+  chestTextFilterControl = new FormControl("");
+  legsTextFilterControl = new FormControl("");
 
   updateTableSubject: Subject<any> = new Subject();
   updatePermutationsSubject: Subject<any> = new Subject();
@@ -46,13 +74,76 @@ export class AppComponent implements OnInit {
   weightStrength: number | null = 1;
 
 
+  constructor(fb: FormBuilder,
+              private csv: DestinyArmorCsvParserService, private httpClient: HttpClient,
+              private perm: DestinyArmorPermutationService) {
+    this.options = fb.group({
+      minMobility: this.minMobilityControl,
+      minResilience: this.minResilienceControl,
+      minRecovery: this.minRecoveryControl,
+      minDiscipline: this.minDisciplineControl,
+      minIntellect: this.minIntellectControl,
+      minStrength: this.minStrengthControl,
+
+      maxMobility: this.maxMobilityControl,
+      maxResilience: this.maxResilienceControl,
+      maxRecovery: this.maxRecoveryControl,
+      maxDiscipline: this.maxDisciplineControl,
+      maxIntellect: this.maxIntellectControl,
+      maxStrength: this.maxStrengthControl,
+
+
+    });
+  }
+
+  toggleAdvanceMode() {
+    this.advanceModeActive = !this.advanceModeActive
+    console.log("this.advanceModeActive", this.advanceModeActive)
+  }
+
   getTable(): PrintedPermutation[] {
     console.log(this.weightMobility, this.weightResilience, this.weightRecovery, this.weightDiscipline, this.weightIntellect, this.weightStrength)
-    let newList = this.permutations.map(d => {
+    console.log(this.helmetTextFilterControl.value, this.gauntletTextFilterControl.value, this.chestTextFilterControl.value, this.legsTextFilterControl.value)
+    console.log(this.permutations.length, this.permutations)
+    // Filter stats
+    let filteredPermutations = this.permutations.filter(p => {
+      if (!p.gauntlet || !p.chest || !p.legs) {
+        console.warn(p)
+        return false;
+      }
+
+
+      // filter name(s)
+      if ((this.helmetTextFilterControl.value && p.helmet.name.toLowerCase().indexOf(this.helmetTextFilterControl.value.toLowerCase()) < 0)
+        || (this.gauntletTextFilterControl.value && p.gauntlet.name.toLowerCase().indexOf(this.gauntletTextFilterControl.value.toLowerCase()) < 0)
+        || (this.chestTextFilterControl.value && p.chest.name.toLowerCase().indexOf(this.chestTextFilterControl.value.toLowerCase()) < 0)
+        || (this.legsTextFilterControl.value && p.legs.name.toLowerCase().indexOf(this.legsTextFilterControl.value.toLowerCase()) < 0))
+        return false;
+
+      // filter stats
+      if (p.stats.mobility < this.minMobilityControl.value || (!!this.maxMobilityControl.value && p.stats.mobility > this.maxMobilityControl.value)
+        || p.stats.resilience < this.minResilienceControl.value || (!!this.maxResilienceControl.value && p.stats.resilience > this.maxResilienceControl.value)
+        || p.stats.recovery < this.minRecoveryControl.value || (!!this.maxRecoveryControl.value && p.stats.recovery > this.maxRecoveryControl.value)
+        || p.stats.discipline < this.minDisciplineControl.value || (!!this.maxDisciplineControl.value && p.stats.discipline > this.maxDisciplineControl.value)
+        || p.stats.intellect < this.minIntellectControl.value || (!!this.maxIntellectControl.value && p.stats.intellect > this.maxIntellectControl.value)
+        || p.stats.strength < this.minStrengthControl.value || (!!this.maxStrengthControl.value && p.stats.strength > this.maxStrengthControl.value))
+        return false;
+
+      return true;
+    })
+    let newList = filteredPermutations.map(d => {
       let p: PrintedPermutation = {
-        permutation: d,
+        permutation: Object.assign({}, d),
         score: 0
       }
+
+      d.stats.mobility += 1 * (this.staticMobilityControl.value || 0);
+      d.stats.resilience += 1 * (this.staticResilienceControl.value || 0);
+      d.stats.recovery += 1 * (this.staticRecoveryControl.value || 0);
+      d.stats.discipline += 1 * (this.staticDisciplineControl.value || 0);
+      d.stats.intellect += 1 * (this.staticIntellectControl.value || 0);
+      d.stats.strength += 1 * (this.staticStrengthControl.value || 0);
+
       if (d.gauntlet && d.legs && d.chest) {
         let mobility = d.stats.mobility
         let resilience = d.stats.resilience
@@ -91,13 +182,9 @@ export class AppComponent implements OnInit {
       .slice(0, 40)
   }
 
-  constructor(private csv: DestinyArmorCsvParserService, private httpClient: HttpClient,
-              private perm: DestinyArmorPermutationService) {
-  }
-
   ngOnInit(): void {
     this.updateTableSubject
-      .pipe(debounceTime(50))
+      .pipe(debounceTime(300))
       .subscribe(() => {
           this.printedTable = this.getTable()
           console.log("this.printedTable", this.printedTable)
@@ -120,9 +207,7 @@ export class AppComponent implements OnInit {
         .subscribe(
           d => {
             d = d.filter(c => c.clazz == this.selectedClass)
-            let titanPermutations = this.perm.buildPermutations(d)
-            this.permutations = titanPermutations;
-            console.log(titanPermutations)
+            this.permutations = this.perm.buildPermutations(d);
             this.updateTableSubject.next()
           }
         )
@@ -142,6 +227,16 @@ export class AppComponent implements OnInit {
   onRemove(event: any) {
     console.log(event);
     this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  onTextFilterChange(): void {
+    console.log("ONCHANGE TEXTFILTER")
+    this.updateTableSubject.next()
+  }
+
+  onLimitsChange(): void {
+    console.log("ONCHANGE LIMITS")
+    this.updateTableSubject.next()
   }
 
   onWeightChange(): void {

@@ -15,24 +15,197 @@
   </mat-select>
 </mat-form-field>
 
-<br>
-<div class="weight-input">
-  <h2>Weights:</h2>
-  Mobility
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightMobility" (change)="onWeightChange()"></mat-slider>
-  Resilience
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightResilience" (change)="onWeightChange()"></mat-slider>
-  Recovery
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightRecovery" (change)="onWeightChange()"></mat-slider>
+
+<form class="example-container" [formGroup]="options">
+  <mat-slide-toggle [checked]="advanceModeActive" (toggleChange)="toggleAdvanceMode()">Toggle advanced mode. Adds many
+    more configuration fields!
+  </mat-slide-toggle>
   <br/>
-  Discipline
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightDiscipline" (change)="onWeightChange()"></mat-slider>
-  Intellect
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightIntellect" (change)="onWeightChange()"></mat-slider>
-  Strength
-  <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightStrength" (change)="onWeightChange()"></mat-slider>
-</div>
-<br>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Mobility</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minMobilityControl">
+    <mat-error *ngIf="minMobilityControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Mobility</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxMobilityControl">
+    <mat-error *ngIf="maxMobilityControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Mobility Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20 for Powerful Friends" min="0"
+           [formControl]="staticMobilityControl">
+    <mat-error *ngIf="staticMobilityControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field floatLabel="always">
+    <mat-label>Mobility Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightMobility" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Resilience</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minResilienceControl">
+    <mat-error *ngIf="minResilienceControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Resilience</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxResilienceControl">
+    <mat-error *ngIf="maxResilienceControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Resilience Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 10" min="0"
+           [formControl]="staticResilienceControl">
+    <mat-error *ngIf="staticResilienceControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+  <mat-form-field floatLabel="always">
+    <mat-label>Resilience Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightResilience" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Recovery</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minRecoveryControl">
+    <mat-error *ngIf="minRecoveryControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Recovery</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxRecoveryControl">
+    <mat-error *ngIf="maxRecoveryControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Recovery Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 10" min="0"
+           [formControl]="staticRecoveryControl">
+    <mat-error *ngIf="staticRecoveryControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+  <mat-form-field floatLabel="always">
+    <mat-label>Recovery Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightRecovery" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Discipline</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minDisciplineControl">
+    <mat-error *ngIf="minDisciplineControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Discipline</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxDisciplineControl">
+    <mat-error *ngIf="maxDisciplineControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Discipline Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 10" min="0"
+           [formControl]="staticDisciplineControl">
+    <mat-error *ngIf="staticDisciplineControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+  <mat-form-field floatLabel="always">
+    <mat-label>Discipline Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightDiscipline" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Intellect</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minIntellectControl">
+    <mat-error *ngIf="minIntellectControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Intellect</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxIntellectControl">
+    <mat-error *ngIf="maxIntellectControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Intellect Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 10" min="0"
+           [formControl]="staticIntellectControl">
+    <mat-error *ngIf="staticIntellectControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+  <mat-form-field floatLabel="always">
+    <mat-label>Intellect Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightIntellect" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Minimum Strength</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18" max="100"
+           [formControl]="minStrengthControl">
+    <mat-error *ngIf="minStrengthControl.invalid">Must be between 18 and 100</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Maximum Strength</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 20" min="18"
+           [formControl]="maxStrengthControl">
+    <mat-error *ngIf="maxStrengthControl.invalid">Must not be lower than 18</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="advanceModeActive">
+    <mat-label>Static Strength Boost</mat-label>
+    <input matInput (change)="onLimitsChange()" type="number" placeholder="Ex. 10" min="0"
+           [formControl]="staticStrengthControl">
+    <mat-error *ngIf="staticStrengthControl.invalid">Must not be lower than 0.</mat-error>
+  </mat-form-field>
+  <mat-form-field floatLabel="always">
+    <mat-label>Strength Weight</mat-label>
+    <mat-slider min="0.3" max="2" step="0.1" [(value)]="weightStrength" (change)="onWeightChange()"
+                style="margin-top:-16px; width: 100%; margin-bottom: 14px; height: 24px"></mat-slider>
+    <textarea matInput hidden></textarea>
+  </mat-form-field>
+  <br/>
+
+  <div *ngIf="advanceModeActive">
+    <mat-form-field appearance="fill">
+      <mat-label>Helmet Text Filter</mat-label>
+      <input matInput (change)="onTextFilterChange()" (keyup)="onTextFilterChange()" type="text"
+             placeholder="Ex. Khepri's Horn" [formControl]="helmetTextFilterControl">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gauntlets Text Filter</mat-label>
+      <input matInput (change)="onTextFilterChange()" (keyup)="onTextFilterChange()" type="text"
+             placeholder="Ex. Synthoceps" [formControl]="gauntletTextFilterControl">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Chest Text Filter</mat-label>
+      <input matInput (change)="onTextFilterChange()" (keyup)="onTextFilterChange()" type="text"
+             placeholder="Ex. Armamentarium" [formControl]="chestTextFilterControl">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Legs Text Filter</mat-label>
+      <input matInput (change)="onTextFilterChange()" (keyup)="onTextFilterChange()" type="text"
+             placeholder="Ex. Lion Rampant" [formControl]="legsTextFilterControl">
+    </mat-form-field>
+  </div>
+</form>
 
 <div id="uploadInfoBox" *ngIf="files.length == 0">
   <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
@@ -44,7 +217,8 @@
 <div *ngIf="files.length > 0">
   These are the sets i could find. The set with the best score it on top.
   Change the weights to change the order of these builds.<br>
-  The tool assumes all your armor is masterworked. It does not add any stat mods into account, this is totally up to you.<br>
+  The tool assumes all your armor is masterworked. It does not add any stat mods into account, this is totally up to
+  you.<br>
   <b>Click on a row to show the Items used for each loadout.</b>
   <table mat-table [dataSource]="printedTable" multiTemplateDataRows>
     <!--- Note that these columns can be defined in any order.
@@ -161,11 +335,15 @@
   <br>
   The following features are in the pipeline, ordered by importance (by Mijago):
   <ul>
-    <li>Filter by Item name per Slot*</li>
-    <li>Filter lower and upper limit of stats (to allow "must have 50 mobility"-builds)*</li>
+    <li>
+      <del>Filter by Item name per Slot*</del>
+    </li>
+    <li>
+      <del>Filter lower and upper limit of stats (to allow "must have 50 mobility"-builds)*</del>
+    </li>
     <li>Allow the definition of standard values (like Powerful Friends, Radiant Light, Stasis)*</li>
     <li>Allow modification of penalties*</li>
-    <li>Save settings across sessions (cookies!)</li>
+    <li>Save settings across sessions (cookies!)*</li>
     <li>Bungie API login (to get rid of destinyArmor.csv)</li>
     <li>Show icons of the items, and the name on hover. Or something like this. At least show the Icons!</li>
     <li>Clean the code. This thing is one big hack. Don't judge me, it was a <a

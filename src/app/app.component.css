@@ -6,17 +6,20 @@ ngx-dropzone, ngx-dropzone-preview {
   background-color: #343434;
   outline-color: #343434;
 }
+
 table {
   width: 100%;
 }
+
 .example-element-detail {
   overflow: hidden;
   display: flex;
 }
 
 .example-element-row td {
-   border-bottom-width: 0;
- }
+  border-bottom-width: 0;
+}
+
 tr.example-detail-row {
   height: 0;
 }
@@ -31,3 +34,8 @@ tr.example-detail-row {
   align-items: center;
   justify-content: center;
 }
+
+.example-container  mat-form-field {
+  margin-right: 2px;
+}
+

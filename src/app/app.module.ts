@@ -12,24 +12,26 @@ import {MatTableModule} from "@angular/material/table";
 import {MatSelectModule} from "@angular/material/select";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    NgxCsvParserModule,
-    HttpClientModule,
-    NgxDropzoneModule,
-    BrowserAnimationsModule,
-    MatInputModule,
-    MatSliderModule,
-    MatTableModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatButtonModule
-  ],
+    imports: [
+        BrowserModule,
+        NgxCsvParserModule,
+        HttpClientModule,
+        NgxDropzoneModule,
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatSliderModule,
+        MatTableModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatSlideToggleModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
