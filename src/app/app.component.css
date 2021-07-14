@@ -1,0 +1,33 @@
+a {
+  color: whitesmoke;
+}
+
+ngx-dropzone, ngx-dropzone-preview {
+  background-color: #343434;
+  outline-color: #343434;
+}
+table {
+  width: 100%;
+}
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-row td {
+   border-bottom-width: 0;
+ }
+tr.example-detail-row {
+  height: 0;
+}
+
+.square {
+  width: 35px;
+  height: 35px;
+  border: white double;
+  float: left;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
