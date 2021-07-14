@@ -26,7 +26,7 @@ interface PrintedPermutation {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'D2Armor';
+  title = 'D2GearCalculator';
 
 
   updateTableSubject: Subject<any> = new Subject();

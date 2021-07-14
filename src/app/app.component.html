@@ -34,7 +34,7 @@
 </div>
 <br>
 
-<div id="infoBox" *ngIf="files.length == 0">
+<div id="uploadInfoBox" *ngIf="files.length == 0">
   <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
     at the bottom of the Settings section.</h1>
   Otherwise, click <a mat-flat-button (click)="addExampleFile()">here</a> to use example items. Please don't judge me
@@ -44,7 +44,8 @@
 <div *ngIf="files.length > 0">
   These are the sets i could find. The set with the best score it on top.
   Change the weights to change the order of these builds.<br>
-  <b>Click on a row to show the Items used for this loadout.</b>
+  The tool assumes all your armor is masterworked. It does not add any stat mods into account, this is totally up to you.<br>
+  <b>Click on a row to show the Items used for each loadout.</b>
   <table mat-table [dataSource]="printedTable" multiTemplateDataRows>
     <!--- Note that these columns can be defined in any order.
      The actual rendered columns are set as a property on the row definition" -->
@@ -152,13 +153,18 @@
 <div>
   <br>
   <br>
-  This tool was made by Mijago for the community of the <a href="https://d2sanctuary.com">D2 Sanctuary</a> community. You can find the Discord <a href="https://discord.gg/d2sanctuary">here</a>.
+  This tool was made by Mijago for the community of the <a href="https://d2sanctuary.com">D2 Sanctuary</a> community.
+  You can find the Discord <a href="https://discord.gg/d2sanctuary">here</a>.
+  <br>
+  It takes your destinyArmor.csv (from <a href="https://app.destinyitemmanager.com/">DIM</a>) and generates permutations
+  of all the gear in your inventory and vault, based on the weights you give each stat.
   <br>
   The following features are in the pipeline, ordered by importance (by Mijago):
   <ul>
-    <li>Filter by Item name per Slot</li>
-    <li>Filter lower and upper limit of stats (to allow "must have 50 mobility"-builds)</li>
-    <li>Allow modification of penalties</li>
+    <li>Filter by Item name per Slot*</li>
+    <li>Filter lower and upper limit of stats (to allow "must have 50 mobility"-builds)*</li>
+    <li>Allow the definition of standard values (like Powerful Friends, Radiant Light, Stasis)*</li>
+    <li>Allow modification of penalties*</li>
     <li>Save settings across sessions (cookies!)</li>
     <li>Bungie API login (to get rid of destinyArmor.csv)</li>
     <li>Show icons of the items, and the name on hover. Or something like this. At least show the Icons!</li>
@@ -166,4 +172,6 @@
       href="https://github.com/Mijago/D2-Gear-Calculator">nice python script</a> before I wrote this page.
     </li>
   </ul>
+  *) These features are available in the <a href="https://github.com/Mijago/D2-Gear-Calculator">Python version</a> of
+  this page.
 </div>
