@@ -131,26 +131,28 @@ export class AppComponent implements OnInit {
 
       return true;
     })
-    let newList = filteredPermutations.map(d => {
+    let newList = filteredPermutations.map(data => {
       let p: PrintedPermutation = {
-        permutation: Object.assign({}, d),
+        permutation: Object.assign({}, data),
         score: 0
       }
+      let nstats = Object.assign({}, data.stats)
+      p.permutation.stats = nstats
 
-      d.stats.mobility += 1 * (this.staticMobilityControl.value || 0);
-      d.stats.resilience += 1 * (this.staticResilienceControl.value || 0);
-      d.stats.recovery += 1 * (this.staticRecoveryControl.value || 0);
-      d.stats.discipline += 1 * (this.staticDisciplineControl.value || 0);
-      d.stats.intellect += 1 * (this.staticIntellectControl.value || 0);
-      d.stats.strength += 1 * (this.staticStrengthControl.value || 0);
+      nstats.mobility += 1 * (this.staticMobilityControl.value || 0);
+      nstats.resilience += 1 * (this.staticResilienceControl.value || 0);
+      nstats.recovery += 1 * (this.staticRecoveryControl.value || 0);
+      nstats.discipline += 1 * (this.staticDisciplineControl.value || 0);
+      nstats.intellect += 1 * (this.staticIntellectControl.value || 0);
+      nstats.strength += 1 * (this.staticStrengthControl.value || 0);
 
-      if (d.gauntlet && d.legs && d.chest) {
-        let mobility = d.stats.mobility
-        let resilience = d.stats.resilience
-        let recovery = d.stats.recovery
-        let discipline = d.stats.discipline
-        let intellect = d.stats.intellect
-        let strength = d.stats.strength
+      if (data.gauntlet && data.legs && data.chest) {
+        let mobility = nstats.mobility
+        let resilience = nstats.resilience
+        let recovery = nstats.recovery
+        let discipline = nstats.discipline
+        let intellect = nstats.intellect
+        let strength = nstats.strength
 
         p.score = (
           +(this.weightMobility || 0) * mobility
