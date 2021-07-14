@@ -15,6 +15,12 @@
   </mat-select>
 </mat-form-field>
 
+<div id="uploadInfoBox" *ngIf="files.length == 0">
+  <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
+    at the bottom of the Settings section.</h1>
+  Otherwise, click <a mat-flat-button (click)="addExampleFile()">here</a> to use example items. Please don't judge me
+  for my full vault.
+</div>
 
 <form class="example-container" [formGroup]="options">
   <mat-slide-toggle [checked]="advanceModeActive" (toggleChange)="toggleAdvanceMode()">Toggle advanced mode. Adds many
@@ -206,13 +212,6 @@
     </mat-form-field>
   </div>
 </form>
-
-<div id="uploadInfoBox" *ngIf="files.length == 0">
-  <h1>Please upload your destinyArmor.csv from <a href="https://app.destinyitemmanager.com/">DIM</a>. You can obtain it
-    at the bottom of the Settings section.</h1>
-  Otherwise, click <a mat-flat-button (click)="addExampleFile()">here</a> to use example items. Please don't judge me
-  for my full vault.
-</div>
 
 <div *ngIf="files.length > 0">
   These are the sets i could find. The set with the best score it on top.
