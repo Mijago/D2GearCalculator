@@ -35,7 +35,18 @@ tr.example-detail-row {
   justify-content: center;
 }
 
-.example-container  mat-form-field {
+.statTotalRow > td {
+  border-top: aliceblue double;
+}
+.addModRow > td, .staticModBoostRow>td {
+  border-top: aliceblue solid 1px;
+}
+
+.specificStatTable tr>td {
+  text-align: right;
+}
+
+.example-container mat-form-field {
   margin-right: 2px;
 }
 

@@ -12,6 +12,7 @@ import {Stats} from "./model/stats";
 
 interface PrintedPermutation {
   permutation: Permutation;
+  mods: Stats[];
   score: number
 }
 
@@ -150,6 +151,7 @@ export class AppComponent implements OnInit {
     let newList = filteredPermutations.map(data => {
       let p: PrintedPermutation = {
         permutation: data,
+        mods: [],
         score: 0
       }
       p.score = this.getScore(data);
@@ -159,7 +161,7 @@ export class AppComponent implements OnInit {
       .slice(0, 40)
   }
 
-  getScore(data: Permutation) : number {
+  getScore(data: Permutation): number {
     let score = 0;
     if (data.gauntlet && data.legs && data.chest) {
       let mobility = data.stats.mobility
@@ -170,12 +172,12 @@ export class AppComponent implements OnInit {
       let strength = data.stats.strength
 
       score = (
-        + Math.min(100,this.weightMobility || 0) * mobility
-        + Math.min(100,this.weightResilience || 0) * resilience
-        + Math.min(100,this.weightRecovery || 0) * recovery
-        + Math.min(100,this.weightDiscipline || 0) * discipline
-        + Math.min(100,this.weightIntellect || 0) * intellect
-        + Math.min(100,this.weightStrength || 0) * strength
+        +Math.min(100, this.weightMobility || 0) * mobility
+        + Math.min(100, this.weightResilience || 0) * resilience
+        + Math.min(100, this.weightRecovery || 0) * recovery
+        + Math.min(100, this.weightDiscipline || 0) * discipline
+        + Math.min(100, this.weightIntellect || 0) * intellect
+        + Math.min(100, this.weightStrength || 0) * strength
         // stats from 1-4 and 6-9 are wasted
         - 4 * (mobility % 5 > 0 ? 1 : 0)
         - 4 * (resilience % 5 > 0 ? 1 : 0)
@@ -280,4 +282,53 @@ export class AppComponent implements OnInit {
       + Math.floor(stat.strength / 10)
   }
 
+  addMod(permutation: PrintedPermutation, name: string, value: number) {
+    let mod: Stats = {recovery: 0, discipline: 0, resilience: 0, intellect: 0, strength: 0, mobility: 0,}
+    switch (name) {
+      case "mobility":
+        mod.mobility = value;
+        break;
+      case "recovery":
+        mod.recovery = value;
+        break;
+      case "discipline":
+        mod.discipline = value;
+        break;
+      case "resilience":
+        mod.resilience = value;
+        break;
+      case "intellect":
+        mod.intellect = value;
+        break;
+      case "strength":
+        mod.strength = value;
+        break;
+    }
+    permutation.mods.push(mod);
+  }
+
+  removeMod(permutation: PrintedPermutation, mod: Stats) {
+    console.log("permutation.mods", permutation.mods, permutation.mods.indexOf(mod))
+    permutation.mods.splice(
+      permutation.mods.indexOf(mod), 1
+    )
+  }
+
+  getStatSum(stats: Stats[]) {
+    return stats.reduce((a, b) => {
+        a.mobility += b.mobility;
+        a.resilience += b.resilience;
+        a.recovery += b.recovery;
+        a.discipline += b.discipline;
+        a.intellect += b.intellect;
+        a.strength += b.strength;
+        return a;
+      }, {recovery: 0, discipline: 0, resilience: 0, intellect: 0, strength: 0, mobility: 0},
+    )
+  }
+
+  usesStaticStatBoosts() {
+    return (this.staticResilienceControl.value + this.staticResilienceControl.value + this.staticRecoveryControl.value
+      + this.staticDisciplineControl.value + this.staticIntellectControl.value + this.staticStrengthControl.value) > 0
+  }
 }

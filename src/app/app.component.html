@@ -280,7 +280,7 @@
             Items:
           </div>
           <div class="example-element-description">
-            <table>
+            <table class="specificStatTable">
               <thead>
               <tr>
                 <th>Name</th>
@@ -290,17 +290,84 @@
                 <th>Discipline</th>
                 <th>Intellect</th>
                 <th>Strength</th>
+                <th></th>
               </tr>
               </thead>
               <tr
                 *ngFor="let i of [element.permutation.helmet,element.permutation.gauntlet,element.permutation.chest,element.permutation.legs]">
                 <td>{{i.name}}</td>
-                <td>{{i.stats.mobility}}</td>
-                <td>{{i.stats.resilience}}</td>
-                <td>{{i.stats.recovery}}</td>
-                <td>{{i.stats.discipline}}</td>
-                <td>{{i.stats.intellect}}</td>
-                <td>{{i.stats.strength}}</td>
+                <td>{{i.stats.mobility + 2}}</td>
+                <td>{{i.stats.resilience + 2}}</td>
+                <td>{{i.stats.recovery + 2}}</td>
+                <td>{{i.stats.discipline + 2}}</td>
+                <td>{{i.stats.intellect + 2}}</td>
+                <td>{{i.stats.strength + 2}}</td>
+              </tr>
+              <tr>
+                <td>Any Class Item</td>
+                <td>{{2}}</td>
+                <td>{{2}}</td>
+                <td>{{2}}</td>
+                <td>{{2}}</td>
+                <td>{{2}}</td>
+                <td>{{2}}</td>
+              </tr>
+              <tr *ngIf="usesStaticStatBoosts()" class="staticModBoostRow">
+                <td>Static Boosts</td>
+                <td>{{staticMobilityControl.value}}</td>
+                <td>{{staticResilienceControl.value}}</td>
+                <td>{{staticRecoveryControl.value}}</td>
+                <td>{{staticDisciplineControl.value}}</td>
+                <td>{{staticIntellectControl.value}}</td>
+                <td>{{staticStrengthControl.value}}</td>
+              </tr>
+              <tr class="statTotalRow">
+                <td>Total</td>
+                <td>{{element.permutation.stats.mobility}}</td>
+                <td>{{element.permutation.stats.resilience}}</td>
+                <td>{{element.permutation.stats.recovery}}</td>
+                <td>{{element.permutation.stats.discipline}}</td>
+                <td>{{element.permutation.stats.intellect}}</td>
+                <td>{{element.permutation.stats.strength}}</td>
+              </tr>
+              <tr class="addModRow5">
+                <td>Add +5 Mod</td>
+                <td><button mat-raised-button (click)="addMod(element, 'mobility', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'resilience', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'recovery', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'discipline', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'intellect', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'strength', 5)" [disabled]="element.mods.length >=5">+5</button></td>
+              </tr>
+              <tr class="addModRow10">
+                <td>Add +10 Mod</td>
+                <td><button mat-raised-button (click)="addMod(element, 'mobility', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'resilience', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'recovery', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'discipline', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'intellect', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+                <td><button mat-raised-button (click)="addMod(element, 'strength', 10)" [disabled]="element.mods.length >=5">+10</button></td>
+              </tr>
+
+              <tr class="modRow"
+                  *ngFor="let mod of element.mods">
+                <td></td>
+                <td><span *ngIf="mod.mobility > 0">+{{mod.mobility}}</span></td>
+                <td><span *ngIf="mod.resilience > 0">+{{mod.resilience}}</span></td>
+                <td><span *ngIf="mod.recovery > 0">+{{mod.recovery}}</span></td>
+                <td><span *ngIf="mod.discipline > 0">+{{mod.discipline}}</span></td>
+                <td><span *ngIf="mod.intellect > 0">+{{mod.intellect}}</span></td>
+                <td><span *ngIf="mod.strength > 0">+{{mod.strength}}</span></td>
+                <td><button mat-raised-button (click)="removeMod(element, mod)">Remove</button></td>
+              </tr>
+              <tr class="statTotalRow">
+                <td>Total with mods</td>
+                <td>{{element.permutation.stats.mobility + getStatSum(element.mods).mobility}}</td>
+                <td>{{element.permutation.stats.resilience+ getStatSum(element.mods).resilience}}</td>
+                <td>{{element.permutation.stats.recovery+ getStatSum(element.mods).recovery}}</td>
+                <td>{{element.permutation.stats.discipline+ getStatSum(element.mods).discipline}}</td>
+                <td>{{element.permutation.stats.intellect+ getStatSum(element.mods).intellect}}</td>
+                <td>{{element.permutation.stats.strength+ getStatSum(element.mods).strength}}</td>
               </tr>
             </table>
 
@@ -346,10 +413,14 @@
     <li>
       <del>Filter lower and upper limit of stats (to allow "must have 50 mobility"-builds)*</del>
     </li>
-    <li><del>Allow the definition of standard values (like Powerful Friends, Radiant Light, Stasis)*</del></li>
+    <li>
+      <del>Allow the definition of standard values (like Powerful Friends, Radiant Light, Stasis)*</del>
+    </li>
     <li>Allow modification of penalties*</li>
     <li>Reset Button for the input mask</li>
-    <li><del>Show status tiers for each set</del></li>
+    <li>
+      <del>Show status tiers for each set</del>
+    </li>
     <li>Save settings across sessions (cookies!)*</li>
     <li>Bungie API login (to get rid of destinyArmor.csv)</li>
     <li>Show icons of the items, and the name on hover. Or something like this. At least show the Icons!</li>
