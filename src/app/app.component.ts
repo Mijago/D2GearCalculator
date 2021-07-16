@@ -152,44 +152,48 @@ export class AppComponent implements OnInit {
         permutation: data,
         score: 0
       }
-      let nstats = data.stats
-
-      if (data.gauntlet && data.legs && data.chest) {
-        let mobility = nstats.mobility
-        let resilience = nstats.resilience
-        let recovery = nstats.recovery
-        let discipline = nstats.discipline
-        let intellect = nstats.intellect
-        let strength = nstats.strength
-
-        p.score = (
-          +(this.weightMobility || 0) * mobility
-          + (this.weightResilience || 0) * resilience
-          + (this.weightRecovery || 0) * recovery
-          + (this.weightDiscipline || 0) * discipline
-          + (this.weightIntellect || 0) * intellect
-          + (this.weightStrength || 0) * strength
-          // stats from 1-4 and 6-9 are wasted
-          - 4 * (mobility % 5 > 0 ? 1 : 0)
-          - 4 * (resilience % 5 > 0 ? 1 : 0)
-          - 4 * (recovery % 5 > 0 ? 1 : 0)
-          - 4 * (discipline % 5 > 0 ? 1 : 0)
-          - 4 * (intellect % 5 > 0 ? 1 : 0)
-          - 4 * (strength % 5 > 0 ? 1 : 0)
-          // stats over 100 are wasted
-          - 1.2 * (Math.max(0, mobility - 100))
-          - 1.2 * (Math.max(0, resilience - 100))
-          - 1.2 * (Math.max(0, recovery - 100))
-          - 1.2 * (Math.max(0, discipline - 100))
-          - 1.2 * (Math.max(0, intellect - 100))
-          - 1.2 * (Math.max(0, strength - 100))
-        )
-        p.score = Math.ceil(p.score)
-      }
+      p.score = this.getScore(data);
       return p
     })
     return newList.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, 40)
+  }
+
+  getScore(data: Permutation) : number {
+    let score = 0;
+    if (data.gauntlet && data.legs && data.chest) {
+      let mobility = data.stats.mobility
+      let resilience = data.stats.resilience
+      let recovery = data.stats.recovery
+      let discipline = data.stats.discipline
+      let intellect = data.stats.intellect
+      let strength = data.stats.strength
+
+      score = (
+        + Math.min(100,this.weightMobility || 0) * mobility
+        + Math.min(100,this.weightResilience || 0) * resilience
+        + Math.min(100,this.weightRecovery || 0) * recovery
+        + Math.min(100,this.weightDiscipline || 0) * discipline
+        + Math.min(100,this.weightIntellect || 0) * intellect
+        + Math.min(100,this.weightStrength || 0) * strength
+        // stats from 1-4 and 6-9 are wasted
+        - 4 * (mobility % 5 > 0 ? 1 : 0)
+        - 4 * (resilience % 5 > 0 ? 1 : 0)
+        - 4 * (recovery % 5 > 0 ? 1 : 0)
+        - 4 * (discipline % 5 > 0 ? 1 : 0)
+        - 4 * (intellect % 5 > 0 ? 1 : 0)
+        - 4 * (strength % 5 > 0 ? 1 : 0)
+        // stats over 100 are wasted
+        - 1.2 * (Math.max(0, mobility - 100))
+        - 1.2 * (Math.max(0, resilience - 100))
+        - 1.2 * (Math.max(0, recovery - 100))
+        - 1.2 * (Math.max(0, discipline - 100))
+        - 1.2 * (Math.max(0, intellect - 100))
+        - 1.2 * (Math.max(0, strength - 100))
+      )
+      score = Math.ceil(score)
+    }
+    return score
   }
 
   ngOnInit(): void {
