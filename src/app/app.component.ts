@@ -328,7 +328,7 @@ export class AppComponent implements OnInit {
   }
 
   usesStaticStatBoosts() {
-    return (this.staticResilienceControl.value + this.staticResilienceControl.value + this.staticRecoveryControl.value
+    return (this.staticMobilityControl.value + this.staticResilienceControl.value + this.staticRecoveryControl.value
       + this.staticDisciplineControl.value + this.staticIntellectControl.value + this.staticStrengthControl.value) > 0
   }
 }
